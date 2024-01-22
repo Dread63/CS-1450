@@ -10,7 +10,7 @@ import java.io.*;
 
 public class DouglasJoshuaAssignment1 {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         
         int size1 = 1 + (int)(Math.random() * 10);
         int size2 = 1 + (int)(Math.random() * 10);
@@ -27,12 +27,20 @@ public class DouglasJoshuaAssignment1 {
 
         
         File arrayData = new File("assignment1data.txt");
-        PrintWriter resultsFile = new PrintWriter(arrayData);
+        PrintWriter resultingData = new PrintWriter(arrayData);
 
-        for (int i=0; i < size1Array.length; i++) {
-
-            resultsFile.println(size1Array[i]);
+        int i = 0;
+        while(i < size1Array.length) {
+            resultingData.println(size1Array[i]);
+            i++;
         }
+
+        i = 0;
+        while(i < size2Array.length) {
+            resultingData.println(size2Array[i]);
+            i++;
+        }
+        resultingData.close();
 
     }
 
