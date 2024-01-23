@@ -29,19 +29,30 @@ public class DouglasJoshuaAssignment1 {
         File arrayData = new File("assignment1data.txt");
         PrintWriter resultingData = new PrintWriter(arrayData);
 
-        int i = 0;
-        while(i < size1Array.length) {
-            resultingData.println(size1Array[i]);
-            i++;
+        arraySorter(size1Array);
+        arraySorter(size2Array);
+
+        System.out.println("Beggining file writing");
+
+        int shortestArray;
+
+        if (size1Array.length >= size2Array.length) {
+            shortestArray = size2Array.length;
+        }
+        else {
+            shortestArray = size1Array.length;
         }
 
-        i = 0;
-        while(i < size2Array.length) {
-            resultingData.println(size2Array[i]);
-            i++;
+        int x = 0;
+        int z = 0;
+
+        for (int i = 0; i < shortestArray; i++) {
+            
+
+            
         }
         resultingData.close();
-
+        System.out.println("DONE");
     }
 
     public static int[] generateNumbers(int size) {
@@ -63,5 +74,59 @@ public class DouglasJoshuaAssignment1 {
         for (int i=0; i<array.length; i++) {
             System.out.println(array[i]);
         }
-    }    
+    } 
+    
+    public static void arraySorter(int[] array) {
+
+        for (int i = 0; i < array.length - 1; i++) {
+
+            for (int z = 0; z < array.length - 1; z++) {
+
+                if (array[z] > array[z + 1]) {
+
+                    int temp = array[z];
+    
+                    array[z] = array[z + 1];
+                    array[z + 1] = temp;
+                }
+            }
+        }
+    }
+
+    public static void writeDataToFile(int[] array1, int[] array2, PrintWriter writer) {
+
+        int i = 0;
+        int z = 0;
+
+        while (i < array1.length && z < array2.length) {
+
+            if (array1[i] < array2[z]) {
+                System.out.println("Writing " + array1[i]);
+                writer.println(array1[i]);
+                i++;
+            }
+            else if (array2[z] < array1[i]) {
+                System.out.println("Writing " + array2[z]);
+                writer.println(array2[z]);
+                z++;
+            }
+            else {
+                if (array1.length < array2.length) {
+                    System.out.println("Writing " + array1[i]);
+                    writer.println(array1[i]);
+                    i++;
+                }
+                
+                if (array2.length > array1.length || array1.length == array2.length) {
+                    System.out.println("Writing " + array2[z]);
+                    writer.println(array2[z]);
+                    z++;
+                }
+            }
+        }
+
+        while (i < array1.length) {
+
+        }
+    }
 }
