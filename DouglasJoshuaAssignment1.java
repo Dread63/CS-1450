@@ -142,6 +142,7 @@ public class DouglasJoshuaAssignment1 {
     // Remove all duplicate numbers from file and sort in an array
     public static int[] removeDuplicates(int[] array1, int[] array2, Scanner scanner) throws IOException {
 
+
         int previousLine = 0;
         int i = 0; // Used to itterate through noDuplicates
         int zeroCounter = 0; // Used to calculate proper length of final array
