@@ -18,25 +18,19 @@ public class DouglasJoshuaAssignment3 {
 
             String currentLine = fileReader.next();
 
-            if (currentLine.equals("arc")) {
+            String name = fileReader.next();
+            int designAbility  = fileReader.nextInt();
+            int developAbility = fileReader.nextInt();
+            int testAbility = fileReader.nextInt();
+            int managerAbility = fileReader.nextInt();
 
-                String name = fileReader.next();
-                int designAbility  = fileReader.nextInt();
-                int developAbility = fileReader.nextInt();
-                int testAbility = fileReader.nextInt();
-                int managerAbility = fileReader.nextInt();
+            if (currentLine.equals("arc")) {
 
                 Architect architectEmployee = new Architect(name, designAbility);
                 apollo.add(architectEmployee);
             }
 
             else if (currentLine.equals(("qae"))) {
-
-                String name = fileReader.next();
-                int designAbility = fileReader.nextInt();
-                int developAbility = fileReader.nextInt();
-                int testAbility = fileReader.nextInt();
-                int managerAbility = fileReader.nextInt();
                 
                 QAEngineer qaEngineer = new QAEngineer(name, testAbility);
                 apollo.add(qaEngineer);
@@ -44,23 +38,11 @@ public class DouglasJoshuaAssignment3 {
 
             else if (currentLine.equals("swe")) { 
 
-                String name = fileReader.next();
-                int designAbility = fileReader.nextInt();
-                int developAbility = fileReader.nextInt();
-                int testAbility = fileReader.nextInt();
-                int managerAbility = fileReader.nextInt();
-
                 SWEngineer swEngineer = new SWEngineer(name, developAbility, testAbility);
                 apollo.add(swEngineer);
             }
 
             else if (currentLine.equals("swm")) {
-
-                String name = fileReader.next();
-                int designAbility = fileReader.nextInt();
-                int developAbility = fileReader.nextInt();
-                int testAbility = fileReader.nextInt();
-                int managerAbility = fileReader.nextInt();
                 
                 TeamManager manager = new TeamManager(name, managerAbility);
                 apollo.add(manager);
@@ -308,7 +290,6 @@ class TeamManager extends Employee implements Manager {
 interface Designer {
 
     int design();
-
 }
 
 interface Developer {
