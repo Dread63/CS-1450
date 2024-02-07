@@ -14,66 +14,85 @@ public class DouglasJoshuaAssignment3 {
 
         int index = fileReader.nextInt();
         
-        for (int i = 0; i <= index; i++) {
+        for (int i = 0; i < index; i++) {
 
-            if (fileReader.next().equals("arc")) {
+            String currentLine = fileReader.next();
+
+            if (currentLine.equals("arc")) {
 
                 String name = fileReader.next();
                 int designAbility  = fileReader.nextInt();
+                int developAbility = fileReader.nextInt();
+                int testAbility = fileReader.nextInt();
+                int managerAbility = fileReader.nextInt();
 
                 Architect architectEmployee = new Architect(name, designAbility);
                 apollo.add(architectEmployee);
-                fileReader.nextLine();
             }
 
-            else if (fileReader.next().equals(("qae"))) {
+            else if (currentLine.equals(("qae"))) {
 
                 String name = fileReader.next();
-                fileReader.next();
-                fileReader.next();
+                int designAbility = fileReader.nextInt();
+                int developAbility = fileReader.nextInt();
                 int testAbility = fileReader.nextInt();
-                fileReader.nextLine();
-
+                int managerAbility = fileReader.nextInt();
+                
                 QAEngineer qaEngineer = new QAEngineer(name, testAbility);
                 apollo.add(qaEngineer);
             }
 
-            else if (fileReader.next().equals("swe")) { 
+            else if (currentLine.equals("swe")) { 
 
                 String name = fileReader.next();
-                fileReader.next();
+                int designAbility = fileReader.nextInt();
                 int developAbility = fileReader.nextInt();
                 int testAbility = fileReader.nextInt();
+                int managerAbility = fileReader.nextInt();
+
                 SWEngineer swEngineer = new SWEngineer(name, developAbility, testAbility);
                 apollo.add(swEngineer);
-
-                fileReader.nextLine();
             }
 
-            else if (fileReader.next().equals("swm")) {
+            else if (currentLine.equals("swm")) {
 
                 String name = fileReader.next();
-                fileReader.next();
-                fileReader.next();
-                fileReader.next();
+                int designAbility = fileReader.nextInt();
+                int developAbility = fileReader.nextInt();
+                int testAbility = fileReader.nextInt();
                 int managerAbility = fileReader.nextInt();
+                
                 TeamManager manager = new TeamManager(name, managerAbility);
                 apollo.add(manager);
-
-                fileReader.nextLine();
             }
         }
 
-        for (int i = 0; i < apollo.size(); i++) {
-            System.out.println(apollo.get(i).getName());
-        }
+        System.out.println("------------------------------------------------");
+        System.out.printf("%10s%10s%10s%10s%10s%10s%10s\n", "Role", "Name", "Manage", "Design", "Develop", "Test", "Total");
+        System.out.println("------------------------------------------------");
+        displayEmployees(apollo, true);
+
+        System.out.println();
+        System.out.println("Building Spartans Team....");
+        System.out.println();
+
+        findBestDeveloperAndTester(apollo);
+        ArrayList<Employee> spartan = buildTeam(apollo, 5);
+        System.out.println("Employees transferred to Spartans Team");
+        System.out.println("----------------------------------------");
+        System.out.printf("%10s%10s%10s\n", "Role", "Name", "Duties");
+        System.out.println("----------------------------------------");
+        displayEmployees(spartan, false);
+        System.out.println();
+        
+        System.out.println("Employees remaining on Apollo Team");
+        System.out.println("----------------------------------------");
+        System.out.printf("%10s%10s%10s\n", "Role", "Name", "Duties");
+        System.out.println("----------------------------------------");
+        displayEmployees(apollo, false);
     }
 
     public static void displayEmployees(ArrayList<Employee> employees, boolean showAbilities) {
-
-        System.out.println("------------------------------------------------");
-        System.out.printf("%10s%10s%10s%10s%10s%10s%10s", "Role", "Name", "Manage", "Design", "Develop", "Test", "Total");
-        System.out.println("------------------------------------------------");
 
         for (int i = 0; i < employees.size(); i++) {
 
@@ -83,27 +102,85 @@ public class DouglasJoshuaAssignment3 {
             }
 
             else {
-                System.out.printf("%10s%10s%10s", employees.get(i).getRole(), employees.get(i).getName(), employees.get(i).duties());
+                System.out.printf("%10s%10s%10s\n", employees.get(i).getRole(), employees.get(i).getName(), employees.get(i).duties());
             }
         }
     }
 
     public static void displayAbilities(Employee employee) {
 
-        if (employee instanceof Designer) {
-            System.out.println()
-        }
-    }
+        int designAbility = 0;
+        int developAbility = 0;
+        int testAbility = 0;
+        int managerAbility = 0;
+        int total = 0;
 
+        if (employee instanceof Designer) {
+            designAbility = ((Designer)employee).design();
+        }
+
+        if (employee instanceof Developer) {
+            developAbility = ((Developer)employee).develop();
+        }
+
+        if (employee instanceof Tester) {
+            testAbility = ((Tester)employee).test();
+        }
+
+        if (employee instanceof Manager) {
+            managerAbility = ((Manager)employee).manage();
+        }
+
+        total = designAbility + developAbility + testAbility + managerAbility;
+
+        System.out.printf("%10d%10d%10d%10d%10d\n", designAbility, developAbility, testAbility, managerAbility, total);
+    }
+ 
     public static ArrayList<Employee> buildTeam(ArrayList<Employee> employees, int numEmployeesNeeded) {
 
+        ArrayList<Employee> newTeam = new ArrayList<Employee>();
 
+        for (int i = 0; i < numEmployeesNeeded; i++) {
+            
+            int bestEmployee = findBestDeveloperAndTester(employees);
+            newTeam.add(employees.get(bestEmployee));
+            employees.remove(employees.get(bestEmployee));
+        }
+
+        return newTeam;
     }
 
     public static int findBestDeveloperAndTester(ArrayList<Employee> employees) {
 
+        int highestSkillIndex = 0;
+        int highestSkill = 0;
+        int developAbility = 0;
+        int testAbility = 0;
+
+        for (int i = 0; i < employees.size(); i++) {
+
+            if (employees.get(i) instanceof Developer) {
+
+                developAbility = ((Developer)employees.get(i)).develop();
+            }
+            
+            if (employees.get(i) instanceof Tester) {
+
+                testAbility = ((Tester)employees.get(i)).test();
+            }
+
+            int totalSkill = developAbility + testAbility;
+
+            if (totalSkill > highestSkill) {
+                highestSkill = totalSkill;
+                highestSkillIndex = i;
+            }
+        }
+
+        return highestSkillIndex;
     }
 }
+
 
 abstract class Employee {
 
