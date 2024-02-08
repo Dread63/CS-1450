@@ -12,54 +12,59 @@ public class DouglasJoshuaAssignment3 {
 
         Scanner fileReader = new Scanner(employeeInfo);
 
-        int index = fileReader.nextInt();
+        int numEmployees = fileReader.nextInt(); // Defines how many employee objects are expected to be put into apollo array
         
-        for (int i = 0; i < index; i++) {
+        // Filling apollo array with each employee and their given names/abilities
+        for (int i = 0; i < numEmployees; i++) {
 
-            String currentLine = fileReader.next();
-
+            // Defining lines and their values to avoid if statements moving pointer
+            String role = fileReader.next();
             String name = fileReader.next();
             int designAbility  = fileReader.nextInt();
             int developAbility = fileReader.nextInt();
             int testAbility = fileReader.nextInt();
             int managerAbility = fileReader.nextInt();
 
-            if (currentLine.equals("arc")) {
+            if (role.equals("arc")) {
 
                 Architect architectEmployee = new Architect(name, designAbility);
                 apollo.add(architectEmployee);
             }
 
-            else if (currentLine.equals(("qae"))) {
+            else if (role.equals(("qae"))) {
                 
                 QAEngineer qaEngineer = new QAEngineer(name, testAbility);
                 apollo.add(qaEngineer);
             }
 
-            else if (currentLine.equals("swe")) { 
+            else if (role.equals("swe")) { 
 
                 SWEngineer swEngineer = new SWEngineer(name, developAbility, testAbility);
                 apollo.add(swEngineer);
             }
 
-            else if (currentLine.equals("swm")) {
+            else if (role.equals("swm")) {
                 
                 TeamManager manager = new TeamManager(name, managerAbility);
                 apollo.add(manager);
             }
         }
 
+        // Printing initial apollo team to user
         System.out.println("------------------------------------------------");
         System.out.printf("%10s%10s%10s%10s%10s%10s%10s\n", "Role", "Name", "Manage", "Design", "Develop", "Test", "Total");
         System.out.println("------------------------------------------------");
         displayEmployees(apollo, true);
 
+        // Start of spartan team building
         System.out.println();
         System.out.println("Building Spartans Team....");
         System.out.println();
 
-        findBestDeveloperAndTester(apollo);
-        ArrayList<Employee> spartan = buildTeam(apollo, 5);
+        findBestDeveloperAndTester(apollo); // Used to take best employees from apollo and place in spartan
+        ArrayList<Employee> spartan = buildTeam(apollo, 5); // Array list for new team, created using buildTeam
+
+        // Display spartan team information
         System.out.println("Employees transferred to Spartans Team");
         System.out.println("----------------------------------------");
         System.out.printf("%10s%10s%10s\n", "Role", "Name", "Duties");
@@ -67,6 +72,7 @@ public class DouglasJoshuaAssignment3 {
         displayEmployees(spartan, false);
         System.out.println();
         
+        // Display changes in apollo team after losing employees
         System.out.println("Employees remaining on Apollo Team");
         System.out.println("----------------------------------------");
         System.out.printf("%10s%10s%10s\n", "Role", "Name", "Duties");
@@ -74,6 +80,7 @@ public class DouglasJoshuaAssignment3 {
         displayEmployees(apollo, false);
     }
 
+    // Method to display information about employee objects depending on a boolean flag showAbilities
     public static void displayEmployees(ArrayList<Employee> employees, boolean showAbilities) {
 
         for (int i = 0; i < employees.size(); i++) {
@@ -89,6 +96,7 @@ public class DouglasJoshuaAssignment3 {
         }
     }
 
+    // Displaying employees abilities by up-casting to their interfaces
     public static void displayAbilities(Employee employee) {
 
         int designAbility = 0;
@@ -97,6 +105,7 @@ public class DouglasJoshuaAssignment3 {
         int managerAbility = 0;
         int total = 0;
 
+        // Upcasts employee to interface if an instance of interface in order to access abstract methods
         if (employee instanceof Designer) {
             designAbility = ((Designer)employee).design();
         }
@@ -117,7 +126,8 @@ public class DouglasJoshuaAssignment3 {
 
         System.out.printf("%10d%10d%10d%10d%10d\n", designAbility, developAbility, testAbility, managerAbility, total);
     }
- 
+    
+    // Move defined amount of best employees from one team to a new team
     public static ArrayList<Employee> buildTeam(ArrayList<Employee> employees, int numEmployeesNeeded) {
 
         ArrayList<Employee> newTeam = new ArrayList<Employee>();
@@ -125,13 +135,14 @@ public class DouglasJoshuaAssignment3 {
         for (int i = 0; i < numEmployeesNeeded; i++) {
             
             int bestEmployee = findBestDeveloperAndTester(employees);
-            newTeam.add(employees.get(bestEmployee));
-            employees.remove(employees.get(bestEmployee));
+            newTeam.add(employees.get(bestEmployee)); // Adding best employee by referencing index of employees array list
+            employees.remove(employees.get(bestEmployee)); // Removing best employee from previous team by referencing index of employees array list
         }
 
         return newTeam;
     }
 
+    // Finds the object inside of an array list that has the highest combined develop ability and test ability
     public static int findBestDeveloperAndTester(ArrayList<Employee> employees) {
 
         int highestSkillIndex = 0;
@@ -143,12 +154,12 @@ public class DouglasJoshuaAssignment3 {
 
             if (employees.get(i) instanceof Developer) {
 
-                developAbility = ((Developer)employees.get(i)).develop();
+                developAbility = ((Developer)employees.get(i)).develop(); // Upcasts to Developer to acces .develop() method
             }
             
             if (employees.get(i) instanceof Tester) {
 
-                testAbility = ((Tester)employees.get(i)).test();
+                testAbility = ((Tester)employees.get(i)).test(); // Upcasts to Tester to ascces .test() method
             }
 
             int totalSkill = developAbility + testAbility;
@@ -163,7 +174,7 @@ public class DouglasJoshuaAssignment3 {
     }
 }
 
-
+// Abstract super class of all employees encorcing the requirement of a name and role
 abstract class Employee {
 
     private String name;
@@ -188,6 +199,7 @@ abstract class Employee {
     public abstract String duties();
 }
 
+// Concrete subclass of employee with capabilities of a developer and tester
 class SWEngineer extends Employee implements Developer, Tester {
 
     private int testAbility;
@@ -218,6 +230,7 @@ class SWEngineer extends Employee implements Developer, Tester {
     
 }
 
+// Concrete subclass of employee which has the abilities of a tester
 class QAEngineer extends Employee implements Tester {
 
     private int testAbility;
@@ -241,6 +254,7 @@ class QAEngineer extends Employee implements Tester {
     
 }
 
+// Concrete subclass of employee which has the abilities of a designer
 class Architect extends Employee implements Designer {
 
     private int designAbility;
@@ -264,6 +278,7 @@ class Architect extends Employee implements Designer {
     
 }
 
+// Concrete subclass of employee which has the capabilities of a manager
 class TeamManager extends Employee implements Manager {
 
     private int managerAbility;
@@ -287,6 +302,7 @@ class TeamManager extends Employee implements Manager {
     
 }
 
+// Interfaces which require each class implementing them to have defined methods
 interface Designer {
 
     int design();
