@@ -1,3 +1,12 @@
+/*
+ * Name: Joshua Douglas
+ * Class: CS 1450 - 001 (Tue/Thu)
+ * Date: 02.08.24
+ * Assignment #3
+ * Description: This assignment is designed to be a practice in using interfaces, abstract classes, and concrete subclasses. All interfaces and classes will
+ * be centered around one parent class called employee. Each employee object will have a given role, name, and a certain amount of abilities which come from
+ * the different interafces (Designing, Developing, Testing, Managing). This program also utilizes array lists instead of normal arrays.
+ */
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,9 +60,9 @@ public class DouglasJoshuaAssignment3 {
         }
 
         // Printing initial apollo team to user
-        System.out.println("------------------------------------------------");
-        System.out.printf("%10s%10s%10s%10s%10s%10s%10s\n", "Role", "Name", "Manage", "Design", "Develop", "Test", "Total");
-        System.out.println("------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------------");
+        System.out.printf("%-14s%-10s%-10s%-10s%-10s%-10s%-10s\n", "Role", "Name", "Manage", "Design", "Develop", "Test", "Total");
+        System.out.println("---------------------------------------------------------------------------");
         displayEmployees(apollo, true);
 
         // Start of spartan team building
@@ -66,17 +75,17 @@ public class DouglasJoshuaAssignment3 {
 
         // Display spartan team information
         System.out.println("Employees transferred to Spartans Team");
-        System.out.println("----------------------------------------");
-        System.out.printf("%10s%10s%10s\n", "Role", "Name", "Duties");
-        System.out.println("----------------------------------------");
+        System.out.println("---------------------------------------------------------------------------");
+        System.out.printf("%-14s%-10s%-10s\n", "Role", "Name", "Duties");
+        System.out.println("---------------------------------------------------------------------------");
         displayEmployees(spartan, false);
         System.out.println();
         
         // Display changes in apollo team after losing employees
         System.out.println("Employees remaining on Apollo Team");
-        System.out.println("----------------------------------------");
-        System.out.printf("%10s%10s%10s\n", "Role", "Name", "Duties");
-        System.out.println("----------------------------------------");
+        System.out.println("---------------------------------------------------------------------------");
+        System.out.printf("%-14s%-10s%-10s\n", "Role", "Name", "Duties");
+        System.out.println("---------------------------------------------------------------------------");
         displayEmployees(apollo, false);
     }
 
@@ -86,12 +95,12 @@ public class DouglasJoshuaAssignment3 {
         for (int i = 0; i < employees.size(); i++) {
 
             if (showAbilities == true) {
-                System.out.printf("%10s%10s", employees.get(i).getRole(), employees.get(i).getName());
+                System.out.printf("%-15s%-10s", employees.get(i).getRole(), employees.get(i).getName());
                 displayAbilities(employees.get(i));
             }
 
             else {
-                System.out.printf("%10s%10s%10s\n", employees.get(i).getRole(), employees.get(i).getName(), employees.get(i).duties());
+                System.out.printf("%-14s%-10s%-10s\n", employees.get(i).getRole(), employees.get(i).getName(), employees.get(i).duties());
             }
         }
     }
@@ -124,7 +133,7 @@ public class DouglasJoshuaAssignment3 {
 
         total = designAbility + developAbility + testAbility + managerAbility;
 
-        System.out.printf("%10d%10d%10d%10d%10d\n", designAbility, developAbility, testAbility, managerAbility, total);
+        System.out.printf("%-10d%-10d%-10d%-10d%-10d\n", designAbility, developAbility, testAbility, managerAbility, total);
     }
     
     // Move defined amount of best employees from one team to a new team
@@ -147,10 +156,11 @@ public class DouglasJoshuaAssignment3 {
 
         int highestSkillIndex = 0;
         int highestSkill = 0;
-        int developAbility = 0;
-        int testAbility = 0;
 
         for (int i = 0; i < employees.size(); i++) {
+
+            int developAbility = 0;
+            int testAbility = 0;
 
             if (employees.get(i) instanceof Developer) {
 
