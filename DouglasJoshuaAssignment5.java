@@ -40,8 +40,23 @@ public class DouglasJoshuaAssignment5 {
         fillStringStack(mountains1, stringStack1);
         fillStringStack(mountains2, stringStack2);
 
+        System.out.println("Values in stack 1 from numbers1.txt");
         printStack(numStack1);
+        System.out.println("Values in stack 2 from numbers2.txt");
         printStack(numStack2);
+
+        GenericStack<Integer> mergedIntegers = new GenericStack<>();
+        GenericStack<String> mergedStrings = new GenericStack<>();
+
+        mergeStacks(numStack1, numStack2, mergedIntegers);
+        mergeStacks(stringStack1, stringStack2, mergedStrings);
+
+        System.out.println("Values in merged integer stack");
+        printStack(mergedIntegers);
+
+        System.out.println("Values in merged string stack");
+        printStack(mergedStrings);
+
     }
 
     public static int findSecondLargest(Stack<Integer> stack) {
@@ -143,6 +158,35 @@ public class DouglasJoshuaAssignment5 {
             stack.push(tempStack.pop());
         }
     }
+
+    public static <E extends Comparable<E>> void mergeStacks (GenericStack<E> stack1, GenericStack<E> stack2, GenericStack<E> mergedStack) {
+
+        while (!stack1.isEmpty() && !stack2.isEmpty()) {
+
+            E top1 = stack1.peek();
+            E top2 = stack2.peek();
+
+            if (top1.compareTo(top2) >= 0) {
+
+                mergedStack.push(stack2.pop());
+            }
+
+            else {
+
+                mergedStack.push(stack1.pop());
+            }
+        }
+
+        while (!stack1.isEmpty()) {
+
+            mergedStack.push(stack1.pop());
+        }
+
+        while (!stack2.isEmpty()) {
+
+            mergedStack.push(stack2.pop());
+        }
+    }
 }
 
 class GenericStack<E> {
@@ -166,12 +210,11 @@ class GenericStack<E> {
     }
 
     public E pop() {
-        E topValue = stackData.get(stackData.size() - 1);
-        stackData.remove(topValue);
-        return topValue;
+        return stackData.remove(stackData.size() - 1);
     }
 
     public void push(E value) {
         stackData.add(value);
     }
+
 }
