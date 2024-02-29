@@ -57,6 +57,9 @@ public class DouglasJoshuaAssignment5 {
         System.out.println("Values in merged string stack");
         printStack(mergedStrings);
 
+        displayDuplicateCount(mergedIntegers);
+        displayDuplicateCount(mergedStrings);
+
     }
 
     public static int findSecondLargest(Stack<Integer> stack) {
@@ -185,6 +188,46 @@ public class DouglasJoshuaAssignment5 {
         while (!stack2.isEmpty()) {
 
             mergedStack.push(stack2.pop());
+        }
+    }
+
+    public static <E extends Comparable<E>> void displayDuplicateCount (GenericStack<E> duplicatesStack) {
+
+        GenericStack<E> tempStack = new GenericStack<>();
+
+        while (!duplicatesStack.isEmpty()) {
+
+            E top = duplicatesStack.pop();
+
+            int duplicateCount = 1;
+
+            int size = duplicatesStack.getSize();
+
+            boolean duplicateDetected = false;
+
+            for (int i = 0; i < size; i++) {
+
+                E currentValue = duplicatesStack.pop();
+
+                if (top.compareTo(currentValue) == 0) {
+                    duplicateCount++;
+                    duplicateDetected = true;
+                }
+
+                else {
+                    tempStack.push(currentValue);
+                }
+            }
+
+            while (!tempStack.isEmpty()) {
+                
+                duplicatesStack.push(tempStack.pop());
+            }
+
+            if (duplicateDetected) {
+                System.out.println("The value " +  top + " appears " + duplicateCount + " times on the duplicate stack"); 
+
+            }
         }
     }
 }
