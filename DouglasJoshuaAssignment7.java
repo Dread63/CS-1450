@@ -13,18 +13,41 @@ public class DouglasJoshuaAssignment7 {
         GameController gameController = new GameController();
         Game game = new Game();
 
-        File players = new File("players.txt");
+        File players = new File("Players.txt");
         Scanner fileReader = new Scanner(players);
+
+        System.out.println("Game Controller: Moving Players Into Game:");
+        System.out.println("-------------------------------------------------------------------------------------");
 
         while(fileReader.hasNext()) {
 
-            
+            int ranking = fileReader.nextInt();
+            String university = fileReader.next();
+            String name = fileReader.next();
+
+            Player newPlayer = new Player(name, ranking, university);
+
+            gameController.movePlayerIntoGame(game, newPlayer);
         }
+
+        System.out.println();
+        System.out.println("Game Controller: Starting Game - moving players waiting to play into the escape room:");
+        System.out.println("-------------------------------------------------------------------------------------");
+        System.out.printf("%-15s%-15s%-15s%-15s\n", "Player", "University", "Score", "Current Leader");
+        System.out.println("-------------------------------------------------------------------------------------");
+        gameController.simulateGame(game);
+
+        System.out.println();
+        System.out.println("Game Controller: Escape Room Results");
+        System.out.println("------------------------------------");
+        System.out.printf("%-15s%-15s%-15s\n", "Player", "University", "Score");
+        System.out.println("------------------------------------");
+        gameController.displayResults(game);
     }
 }
 
 // Represents one player of the escape room
-class Player implements Comparable {
+class Player implements Comparable<Player> {
 
     private String name;
     private int ranking;
@@ -62,12 +85,20 @@ class Player implements Comparable {
         return String.format("%s\t%s\t\t%d", name, university, score);
     }
 
-    
-
     @Override
-    public int compareTo(Object o) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'compareTo'");
+    public int compareTo(Player otherPlayer) {
+        
+        if (this.getScore() > otherPlayer.getScore()) {
+            return -1;
+        }
+
+        else if (this.getScore() < otherPlayer.getScore()) {
+            return 1;
+        }
+
+        else {
+            return 0;
+        }
     }
 
 }
@@ -221,7 +252,28 @@ class GameController {
 
             game.addPlayerToResultsQ(currentPlayer);
 
-            System.out.print(currentPlayer.getName() + currentPlayer.getUniversity() + currentPlayer.getScore() + currentLeader);
+            System.out.printf("%-15s%-15s%-15s%-15s\n", currentPlayer.getName(), currentPlayer.getUniversity(), currentPlayer.getScore(), currentLeader);
+        }
+    }
+
+    public void displayResults (Game game) {
+
+        while(!game.isResultsQEmpty()) {
+
+            Player currentPlayer = game.removePlayerFromResultsQ();
+
+            System.out.printf("%-15s%-15s%-15s\n", currentPlayer.getName(), currentPlayer.getUniversity(), currentPlayer.getScore());
+        }
+    } 
+
+    public boolean isGameOver(Game game) {
+
+        if (game.isWaitingToPlayQEmpty() == true && game.isResultsQEmpty() == true) {
+            return true;
+        }
+
+        else {
+            return false;
         }
     }
 }
