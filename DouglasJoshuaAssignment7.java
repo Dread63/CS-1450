@@ -1,3 +1,13 @@
+/*
+ * Name: Joshua Douglas
+ * Class: CS 1450 - 001 (Tue/Thu)
+ * Date: 03.21.24
+ * Assignment #7
+ * Description: This program simulates an escape room game where each player will be awarded a score at the end and the winner
+ * will be determined based on the score. The primpary goal of this assignment is to practice using and creating a custom
+ * priority queue and to properly implement the compareTo method. Additionally, this code provides practice with creating different
+ * concrete classes and methods which will be used to manipulate data and interact with other object types throughout the program. 
+ */
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +29,8 @@ public class DouglasJoshuaAssignment7 {
         System.out.println("Game Controller: Moving Players Into Game:");
         System.out.println("-------------------------------------------------------------------------------------");
 
-        while(fileReader.hasNext()) {
+        // Creating players and filling the waitingToPlayQ via the movePlayerIntoGame() function
+        while (fileReader.hasNext()) {
 
             int ranking = fileReader.nextInt();
             String university = fileReader.next();
@@ -30,6 +41,10 @@ public class DouglasJoshuaAssignment7 {
             gameController.movePlayerIntoGame(game, newPlayer);
         }
 
+        // Close reader to avoid any data leakage
+        fileReader.close();
+
+        // Simulating the game by passing our game object to simulateGame()
         System.out.println();
         System.out.println("Game Controller: Starting Game - moving players waiting to play into the escape room:");
         System.out.println("-------------------------------------------------------------------------------------");
@@ -37,12 +52,26 @@ public class DouglasJoshuaAssignment7 {
         System.out.println("-------------------------------------------------------------------------------------");
         gameController.simulateGame(game);
 
+        // Displaying the the players and their standing after game ends
         System.out.println();
         System.out.println("Game Controller: Escape Room Results");
         System.out.println("------------------------------------");
         System.out.printf("%-15s%-15s%-15s\n", "Player", "University", "Score");
         System.out.println("------------------------------------");
         gameController.displayResults(game);
+
+        // Prove the game is over by check if both waitingQ and resultsQ in the game object are empty
+        System.out.println();
+        System.out.println("Game Controller: Proving Game Is Over....");
+        System.out.println("-----------------------------------------");
+
+        if (gameController.isGameOver(game) == true) {
+            System.out.println("The game is over and everyone had a great time!");
+        }
+
+        else {
+            System.out.println("Oops! Something went wronog and the game is stuck running!");
+        }
     }
 }
 
@@ -85,6 +114,7 @@ class Player implements Comparable<Player> {
         return String.format("%s\t%s\t\t%d", name, university, score);
     }
 
+    // Compares player's scores: returns 1 if passed player has higher score, and -1 if passed player has lower score
     @Override
     public int compareTo(Player otherPlayer) {
         
@@ -103,6 +133,7 @@ class Player implements Comparable<Player> {
 
 }
 
+// Class to represent the escape room which users play the game inside of
 class EscapeRoom {
 
     // Return a hash of the key. Key can be any length.
@@ -123,16 +154,19 @@ class EscapeRoom {
          
      } // hash
      
+     // Calulates players score and returns as int
      public int tryToEscape(String playerName, int playerRanking) {
 
         String key = playerName + playerRanking;
 
+        // Calculates the hash and bounds it in the range of 0-100 via the modulo operator
         int score = hash(key) % 101;
 
         return score;
      }
 }
 
+// Class to represent the the overarching game which contains the queues and escape room
 class Game {
 
     private Queue<Player> waitingToPlayQ;
@@ -174,14 +208,17 @@ class Game {
        return resultsQ.peek();
     }
 
+    // Allows the game object to use the tryToEscape function in the EscapeRoom class
     public int tryToEscape(String playerName, int playerRanking) {
         
         return escapeRoom.tryToEscape(playerName, playerRanking);
     }
 }
 
+// Class to define our custom behaviors of a priority queue
 class PriorityQueue {
 
+    // ArrayList used to store all data
     private ArrayList<Player> players;
 
     public PriorityQueue() {
@@ -195,15 +232,18 @@ class PriorityQueue {
 
     public Player peek() {
 
+        // Ensures players arrayList isn't empty to avoid index out of bounds errors
         if (!players.isEmpty()) {
             return players.get(0);
         }
 
+        // If arrayList is empty, return null to the function call
         else {
             return null;
         }
     }
 
+    // Collections.sort is used to ensure our ArrayList orders data like a priority queue
     public void offer(Player player) {
 
         players.add(player);
@@ -212,6 +252,7 @@ class PriorityQueue {
 
     public Player remove() {
 
+        // Ensures players ArrayList isn't empty before removing topPlayer to avoid index out of bounds errors
         if (!players.isEmpty()) {
             Player topPlayer = players.get(0);
             players.remove(0);
@@ -224,20 +265,24 @@ class PriorityQueue {
     }
 }
 
+// Class used to manipulate the players and game together
 class GameController {
 
+    // Fill queue of players waiting to enter escape room
     public void movePlayerIntoGame (Game game, Player player) {
 
         game.addPlayerToWaitingToPlayQ(player);
         System.out.println("Moved into game: " + player.getName());
     }
 
+    // Simulates players in game by removing them from the waitingQ, collecting their score, setting the score, and calculating
+    // the highest score to display current leader
     public void simulateGame (Game game) {
 
         String currentLeader = " ";
         int highestScore = 0;
 
-        while(!game.isWaitingToPlayQEmpty()) {
+        while (!game.isWaitingToPlayQEmpty()) {
 
             Player currentPlayer = game.removePlayerFromWaitingToPlayQ();
 
@@ -245,20 +290,23 @@ class GameController {
 
             currentPlayer.setScore(score);
 
+            // Finding leaders score and name to display throughout game
             if (score > highestScore) {
                 highestScore = score;
                 currentLeader = currentPlayer.getName();
             }
 
+            // Send player to resultsQ once game is over for them
             game.addPlayerToResultsQ(currentPlayer);
 
             System.out.printf("%-15s%-15s%-15s%-15s\n", currentPlayer.getName(), currentPlayer.getUniversity(), currentPlayer.getScore(), currentLeader);
         }
     }
 
+    // Display the players and their scores in order from highest to least
     public void displayResults (Game game) {
 
-        while(!game.isResultsQEmpty()) {
+        while (!game.isResultsQEmpty()) {
 
             Player currentPlayer = game.removePlayerFromResultsQ();
 
@@ -266,6 +314,7 @@ class GameController {
         }
     } 
 
+    // Check if the game ended properly by seeing if both the waitingQ and resultsQ are empty
     public boolean isGameOver(Game game) {
 
         if (game.isWaitingToPlayQEmpty() == true && game.isResultsQEmpty() == true) {
