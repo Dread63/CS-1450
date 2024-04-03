@@ -32,7 +32,7 @@ public class DouglasJoshuaAssignment8 {
 
         Decoder decoder = new Decoder(listRowSize, listColSize, routeStartingRow, routeStartingCol);
 
-
+        decoder.unscramble(listMessageIterator, listKeysIterator);
     }
 
     public static ArrayList<Character> stringToCharArray(String string) {
@@ -50,7 +50,7 @@ public class DouglasJoshuaAssignment8 {
 
 class Decoder {
 
-    private char messageArray[][];
+    private char[][] messageArray;
     private int startingRow;
     private int startingCol;
     private DecodingStack stack;
@@ -70,30 +70,46 @@ class Decoder {
         int row = startingRow;
         int col = startingCol;
 
-        while (msgIterator.hasNext()) {
-            messageArray[numRows-1][0] = 
+        // Adding message to messageArray
+        int numRows = messageArray.length;
+        int numColumns = messageArray[0].length;
+
+        for (int i = numRows - 1; i >= 0; i--) {
+
+            for (int z = 0; z < numColumns; z++) {
+
+                messageArray[i][z] = msgIterator.next();
+            }
         }
 
+        stack.push(messageArray[row][col]); 
+        
         while (keyIterator.hasNext()) {
             
-            if (keyIterator.next() == 'f') {
+            char direction = keyIterator.next();
+
+            if (direction == 'f') {
                 col++;
             }
 
-            if (keyIterator.next() == 'b') {
+            if (direction == 'b') {
                 col--;
             }
 
-            if (keyIterator.next() == 'u') {
+            if (direction == 'u') {
+                row--;
+            }
+
+            if (direction == 'd') {
                 row++;
             }
 
-            if (keyIterator.next() == 'd') {
-                row--;
-            }
+            stack.push(messageArray[row][col]);
         }
-    }
 
+        return ("Hello");
+
+    }
 
 }
 
