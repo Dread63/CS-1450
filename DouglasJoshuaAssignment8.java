@@ -50,14 +50,14 @@ public class DouglasJoshuaAssignment8 {
 
 class Decoder {
 
-    private String messageArray[][];
+    private char messageArray[][];
     private int startingRow;
     private int startingCol;
     private DecodingStack stack;
 
     public Decoder(int numRows, int numCols, int startingRow, int startingCol) {
 
-        messageArray = new String[numRows][numCols];
+        messageArray = new char[numRows][numCols];
 
         stack = new DecodingStack();
 
@@ -67,15 +67,29 @@ class Decoder {
 
     public String unscramble (Iterator<Character> msgIterator, Iterator<Character> keyIterator) {
 
-        messageArray[startingRow][startingCol] = msgIterator.toString();
+        int row = startingRow;
+        int col = startingCol;
 
         while (msgIterator.hasNext()) {
+            messageArray[numRows-1][0] = 
+        }
 
+        while (keyIterator.hasNext()) {
             
+            if (keyIterator.next() == 'f') {
+                col++;
+            }
 
-            
-            if (keyIterator.toString().equals("f")) {
-                col = 
+            if (keyIterator.next() == 'b') {
+                col--;
+            }
+
+            if (keyIterator.next() == 'u') {
+                row++;
+            }
+
+            if (keyIterator.next() == 'd') {
+                row--;
             }
         }
     }
