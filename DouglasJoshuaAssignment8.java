@@ -1,7 +1,18 @@
+/*
+ * Name: Joshua Douglas
+ * Class: CS 1450 - 001 (Tue/Thu)
+ * Date: 04.04.2024
+ * Assignment #8
+ * Description: This program decodes messages encrpted with a route cipher inside of a text file.
+ * Through the use of scanners, arraylists, queues and Iterators, the program breaks down the
+ * secret message, places the values in a 2D array, itterates through the array given the information
+ * in the keys file, and displays the deciphered messages to the user.
+ */
 import java.util.*;
 import java.io.*;
 
 public class DouglasJoshuaAssignment8 {
+
     public static void main(String[] args) throws IOException {
         
         // Opening Files for Reading
@@ -142,20 +153,21 @@ class Decoder {
             
             char direction = keyIterator.next();
 
-            if (direction == 'f') {
-                col++;
-            }
+            switch (direction) {
 
-            if (direction == 'b') {
-                col--;
-            }
+                case 'f': col++;
+                break;
 
-            if (direction == 'u') {
-                row--;
-            }
+                case 'b': col--;
+                break;
 
-            if (direction == 'd') {
-                row++;
+                case 'u': row--;
+                break;
+
+                case 'd': row++;
+                break;
+
+                default: System.out.println("ERROR: INVALID KEYS");
             }
 
             stack.push(messageArray[row][col]);
