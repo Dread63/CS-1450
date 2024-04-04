@@ -32,7 +32,9 @@ public class DouglasJoshuaAssignment8 {
 
         Decoder decoder = new Decoder(listRowSize, listColSize, routeStartingRow, routeStartingCol);
 
-        decoder.unscramble(listMessageIterator, listKeysIterator);
+        String finalMessage = decoder.unscramble(listMessageIterator, listKeysIterator);
+
+        System.out.println(finalMessage);
     }
 
     public static ArrayList<Character> stringToCharArray(String string) {
@@ -107,8 +109,17 @@ class Decoder {
             stack.push(messageArray[row][col]);
         }
 
-        return ("Hello");
+        int size = stack.size();
+        String finalMessage;
 
+        for (int i = 0; i < size; i++) {
+
+            char currentChar = stack.pop();
+            finalMessage = finalMessage + currentChar;
+        }
+
+
+        return finalMessage;
     }
 
 }
