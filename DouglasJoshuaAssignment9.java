@@ -29,6 +29,9 @@ public class DouglasJoshuaAssignment9 {
         fileReader.close();
 
         singleLinkedList.printList();
+        System.out.println("REMOVING ADVENTURES");
+        singleLinkedList.removeDestination("adventure");
+        singleLinkedList.printList();
     }
 }
 
@@ -116,9 +119,43 @@ class ItineraryLinkedList {
 
     public Destination removeDestination(String typeToRemove) {
 
+        Node current = head;
+        Node previous = null;
+        boolean found = false;
+
+        while (current != null && !found) {
+
+            if (current.destination.getType().equals(typeToRemove)) {
+                found = true;
+            }
+
+            else {
+                previous = current;
+                current = current.next;
+            }
+        }
+
+        if (found) {
+
+            // Deleting the first node if previous is null
+            if (previous == null) {
+                head = current.next;
+                
+            }
+
+            else {
+                // Breaking the link
+                previous.next = current.next;
+            }
+
+            return current.destination;
+        } 
+
+        // Return null if no match is found
+        return null;
     }
 
-    void reverse() {
+    reverse() {
 
     }
 
