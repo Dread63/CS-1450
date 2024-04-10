@@ -1,0 +1,12 @@
+7 adventure Paris-Bullet-Train 4th adventure, bullet train back to Paris!
+10 hotel Chateau-Voltaire Perched by the pool sipping wine with the locals
+5 adventure Paris-Bullet-Train 2nd adventure, bullet train to London!
+4 attraction Eiffel-Tower Visit top of tower for a bird's eye view of Paris
+1 start Paris-Station Arrive at train station, say hello to local birds!
+9 food Cafe Getting hungry so try a real French croissant!
+3 adventure Fountain-Of-Seas 1st adventure, skinny dipping in fountains
+8 attraction Champs-Elysees Hanging out on the top of the Arc de Triomphe
+0 adventure Paris Let the adventure begin!
+6 adventure London 3rd adventure, London Eye Ferris wheel!
+11 adventure KaraFun-Paris 5th adventure, karaoke night singing Free Bird!
+2 hotel Chateau-Voltaire Checking in for adventure
