@@ -1,19 +1,32 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
-
+/*
+ * Name: Joshua Douglas
+ * Class: CS 1450 - 001 (Tue/Thu)
+ * Date: 04.11.2024
+ * Assignment #9
+ * Description: This program is designed to demonstrate an understading of both single linked
+ * lists and double linked lists. Using a text file, the program will create destination objects
+ * given the attributes in the string and begin to place them into the single linked list. Then,
+ * the program will print the list, move values out of the list into the double linked list, and
+ * reverse the order of the destinatinos in both lists.
+ */
 public class DouglasJoshuaAssignment9 {
     
     public static void main(String[] args) throws IOException {
         
+        // Initialize data used throughout code
         File itinerary = new File("ParisItinerary.txt");
         Scanner fileReader = new Scanner(itinerary);
 
         ItineraryLinkedList singleLinkedList = new ItineraryLinkedList();
         DoubleLinkedList doubleLinkedList = new DoubleLinkedList();
 
+        // Create destinations until EOF reached
         while (fileReader.hasNext()) {
 
+            // File reader collects whole line, lineScanner moves through single line
             String line = fileReader.nextLine();
             Scanner lineScanner = new Scanner(line);
             int stop = lineScanner.nextInt();
@@ -28,32 +41,42 @@ public class DouglasJoshuaAssignment9 {
         }
         fileReader.close();
 
+
+        // Display initial (unchanged) sorted itinerary
         System.out.println("\nSorted Paris Itinerary\n");
         
         singleLinkedList.printList();
 
-        System.out.println("\nUpdated Itinerary With Adventures Removed\n");
-        
 
-        boolean flag = true;
-        while (flag) {
+        // Display itinerary with removed adventures using removeDestination()
+        System.out.println("\nUpdated Itinerary With Adventures Removed\n");
+
+        // While there are still destinations in the linked list
+        boolean destinationsLeft = true;
+        while (destinationsLeft) {
             
+            // Remove from single linked list and add to double linked list
             Destination removedDestination = singleLinkedList.removeDestination("adventure");
             if (removedDestination != null) {
                 doubleLinkedList.addDestination(removedDestination);
             }
 
+            // No destinations left in single linked list
             else {
-                flag = false;
+                destinationsLeft = false;
             }
         }
 
         singleLinkedList.printList();
 
+
+        // Print removed adventures from single linked list in backwards order
         System.out.println("\nAdventure Destinations in Doubly Linked List - Printed Backwards\n");
         
         doubleLinkedList.printListBackwards();
 
+
+        // Print single linked list in reverse order
         System.out.println("\nItinerary in Reverse Order\n");
         
         singleLinkedList.reverse();
@@ -85,7 +108,7 @@ class Destination {
         return type;
     }
 
-    public String getname() {
+    public String getName() {
         return name;
     }
 
@@ -109,46 +132,56 @@ class Destination {
         this.activity = activity;
     }
 
+    // Converts characteristics of destination into a string that can be printed
     public String toString() {
         
         return String.format("%-10d%-25s%-24s%s", stop, name, type, activity);
     }
 }
 
+// Singly linked list used to store destinations
 class ItineraryLinkedList {
 
     private Node head;
 
+    // Add destinations to the linked list in order of smallest stop value to largest stop value
     public void addByStopNumber(Destination destinationToAdd) {
 
         Node current = head;
         Node tempNode = new Node(destinationToAdd);
 
+        // If linked list empty
         if (head == null || destinationToAdd.getStop() < head.destination.getStop()) {
 
             tempNode.next = head;
             head = tempNode;
         }
 
+        // Find proper location and insert node into linked list
         else {
 
+            // While not at end of list and new destination's stop is smaller than current destination's stop
             while (current.next != null && destinationToAdd.getStop() > current.next.destination.getStop()) {
 
+                // Move forward
                 current = current.next;
             }
 
+            // Insert node
             tempNode.next = current.next;
             current.next = tempNode;
         }         
 
     }
 
+    // Located node based on destinations type and remove from linked list
     public Destination removeDestination(String typeToRemove) {
 
         Node current = head;
         Node previous = null;
         boolean found = false;
 
+        // While linked list not empty and desintation type not found
         while (current != null && !found) {
 
             if (current.destination.getType().equals(typeToRemove)) {
@@ -161,6 +194,7 @@ class ItineraryLinkedList {
             }
         }
 
+        // If type is found, break the node off from linked list
         if (found) {
 
             // Deleting the first node if previous is null
@@ -181,6 +215,7 @@ class ItineraryLinkedList {
         return null;
     }
 
+    // Reverse the order of values in the linked list until front of linked list reached
     public void reverse() {
 
         Node previous = null;
@@ -189,15 +224,19 @@ class ItineraryLinkedList {
 
         while (current != null) {
 
+            // Preserve the pointer of the next node
             nextNode = current.next;
+            // Reverse order of nodes
             current.next = previous;
             previous = current;
+            // Move forward to continue reversing nodes
             current = nextNode;
         }
 
         head = previous;
     }
 
+    // Print destinations inside linked list
     public void printList() {
         
         System.out.printf("%-10s%-25s%-25s%s\n%s\n", "Stop", "Destination Name", "Type", 
@@ -222,11 +261,13 @@ class ItineraryLinkedList {
     }
 }
 
+// Double linked list used to store the removed destinations from the single linked list
 class DoubleLinkedList {
 
     private Node head;
     private Node tail;
 
+    // Add destination to double linked list
     public void addDestination (Destination destination) {
 
         Node tempNode = new Node(destination);
@@ -243,13 +284,16 @@ class DoubleLinkedList {
         }
     }
 
+    // Print double linked list in reverse order
     public void printListBackwards() {
 
         System.out.printf("%-10s%-25s%-25s%s\n%s\n", "Stop", "Destination Name", "Type", 
         "Activity", "--------------------------------------------------------------------------------------------------------------");
 
+        // Start from end of double linked list
         Node currentNode = tail;
 
+        // While not at the front of list, print current node's destination
         while (currentNode != null) {
 
             System.out.println(currentNode.destination.toString());
