@@ -28,9 +28,35 @@ public class DouglasJoshuaAssignment9 {
         }
         fileReader.close();
 
+        System.out.println("\nSorted Paris Itinerary\n");
+        
         singleLinkedList.printList();
-        System.out.println("REMOVING ADVENTURES");
-        singleLinkedList.removeDestination("adventure");
+
+        System.out.println("\nUpdated Itinerary With Adventures Removed\n");
+        
+
+        boolean flag = true;
+        while (flag) {
+            
+            Destination removedDestination = singleLinkedList.removeDestination("adventure");
+            if (removedDestination != null) {
+                doubleLinkedList.addDestination(removedDestination);
+            }
+
+            else {
+                flag = false;
+            }
+        }
+
+        singleLinkedList.printList();
+
+        System.out.println("\nAdventure Destinations in Doubly Linked List - Printed Backwards\n");
+        
+        doubleLinkedList.printListBackwards();
+
+        System.out.println("\nItinerary in Reverse Order\n");
+        
+        singleLinkedList.reverse();
         singleLinkedList.printList();
     }
 }
@@ -85,7 +111,7 @@ class Destination {
 
     public String toString() {
         
-        return String.format("%-2d%-25s%-20s%s", stop, name, type, activity);
+        return String.format("%-10d%-25s%-24s%s", stop, name, type, activity);
     }
 }
 
@@ -155,11 +181,27 @@ class ItineraryLinkedList {
         return null;
     }
 
-    reverse() {
+    public void reverse() {
 
+        Node previous = null;
+        Node current = head;
+        Node nextNode;
+
+        while (current != null) {
+
+            nextNode = current.next;
+            current.next = previous;
+            previous = current;
+            current = nextNode;
+        }
+
+        head = previous;
     }
 
     public void printList() {
+        
+        System.out.printf("%-10s%-25s%-25s%s\n%s\n", "Stop", "Destination Name", "Type", 
+        "Activity", "--------------------------------------------------------------------------------------------------------------");
 
         Node current = head;
         while (current != null) {
@@ -187,10 +229,33 @@ class DoubleLinkedList {
 
     public void addDestination (Destination destination) {
 
+        Node tempNode = new Node(destination);
+        
+        if (head == null) {
+            head = tempNode;
+            tail = tempNode;
+        }
+
+        else {
+            tail.next = tempNode;
+            tempNode.previous = tail;
+            tail = tempNode;
+        }
     }
 
     public void printListBackwards() {
 
+        System.out.printf("%-10s%-25s%-25s%s\n%s\n", "Stop", "Destination Name", "Type", 
+        "Activity", "--------------------------------------------------------------------------------------------------------------");
+
+        Node currentNode = tail;
+
+        while (currentNode != null) {
+
+            System.out.println(currentNode.destination.toString());
+
+            currentNode = currentNode.previous;
+        }
     }
 
     private static class Node {
